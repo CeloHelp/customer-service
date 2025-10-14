@@ -1,10 +1,14 @@
 package com.coderbank.customer_service.repository;
 
+import com.coderbank.customer_service.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface CustomerRepository extends JpaRepository {
+@Repository
+public interface CustomerRepository extends JpaRepository<Customer, UUID> {
     Optional findByCpf(String cpf);
     Optional findByEmail(String email);
 

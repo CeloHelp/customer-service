@@ -1,5 +1,7 @@
 package com.coderbank.customer_service.dto.response;
 
+import com.coderbank.customer_service.model.Customer;
+
 public record CustomerResponseDTO(
         String id,
         String name,
@@ -7,6 +9,8 @@ public record CustomerResponseDTO(
         String email,
         String address
 ) {
+
+
     public String setId(String string) {
         return string;
     }
