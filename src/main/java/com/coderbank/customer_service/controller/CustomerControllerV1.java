@@ -7,20 +7,16 @@ import com.coderbank.customer_service.mapper.CustomerMapper;
 import com.coderbank.customer_service.service.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/customers")
 public class CustomerControllerV1 {
 
     private final CustomerService customerService;
-
-
 
 
     public CustomerControllerV1(CustomerService customerService) {
@@ -42,6 +38,16 @@ public class CustomerControllerV1 {
 
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerResponseDTO> updateCustomer(@PathVariable UUID id, @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
+
+        CustomerResponseDTO updatedCustomer = customerService.updateCustomer(id, customerRequestDTO);
+
+        URI location = URI.create(String.format("/api/v1/customers/%s", updatedCustomer.id()));
+        // Retorna 201 Created com o local do novo recurso no cabeçalho Location
+
+        return ResponseEntity.status(201).body(updatedCustomer);
 
 
+    }
 }

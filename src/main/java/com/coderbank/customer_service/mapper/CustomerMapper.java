@@ -1,5 +1,6 @@
 package com.coderbank.customer_service.mapper;
 
+import com.coderbank.customer_service.dto.request.CustomerRequestDTO;
 import com.coderbank.customer_service.dto.response.CustomerResponseDTO;
 import com.coderbank.customer_service.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,4 +28,16 @@ public class CustomerMapper {
                 .map(CustomerMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    public static void updateEntity(Customer entity, CustomerRequestDTO customerRequestDTO){
+        entity.setName(customerRequestDTO.getName());
+        entity.setEmail(customerRequestDTO.getEmail());
+        entity.setAddress(customerRequestDTO.getAddress());
+
+
+
+    }
+
+
+
 }
