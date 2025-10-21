@@ -12,7 +12,9 @@ import java.util.stream.Collectors;
 
 
 public class CustomerMapper {
+    // Converte Customer para CustomerResponseDTO
     public static CustomerResponseDTO toResponse(Customer customer ){
+        // Mapeia os campos do Customer para o CustomerResponseDTO
 
         return new CustomerResponseDTO(
                 customer.getId().toString(),
@@ -23,12 +25,14 @@ public class CustomerMapper {
         );
 
     }
+    // Converte uma lista de Customer para uma lista de CustomerResponseDTO
     public static List<CustomerResponseDTO> toResponseList(List<Customer> customers ){
         return customers.stream()
                 .map(CustomerMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
+    // Atualiza os campos de um Customer com os dados de um CustomerRequestDTO
     public static void updateEntity(Customer entity, CustomerRequestDTO customerRequestDTO){
         entity.setName(customerRequestDTO.getName());
         entity.setEmail(customerRequestDTO.getEmail());

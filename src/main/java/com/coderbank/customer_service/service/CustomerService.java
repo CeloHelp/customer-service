@@ -37,6 +37,8 @@ public class CustomerService {
 
     @Transactional
     public CustomerResponseDTO createCustomer(final CustomerRequestDTO customerRequestDTO) {
+       // Lógica para criar um novo cliente
+
         Customer customer = CustomerFactory.createFromRequest(customerRequestDTO);
 
         Optional <Customer> existingCustomer = customerRepository.findByCpf(customer.getCpf());
