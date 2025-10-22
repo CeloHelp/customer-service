@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -30,8 +31,9 @@ public class CustomerControllerV1 {
 
         CustomerResponseDTO createdCustomer = customerService.createCustomer(customerRequestDTO);
 
-        URI location = URI.create(String.format("/api/v1/customers/%s", createdCustomer.id()));
         // Retorna 201 Created com o local do novo recurso no cabeçalho Location
+        URI location = URI.create(String.format("/api/v1/customers/%s", createdCustomer.id()));
+
 
         return ResponseEntity.status(201).body(createdCustomer);
 
@@ -43,11 +45,23 @@ public class CustomerControllerV1 {
 
         CustomerResponseDTO updatedCustomer = customerService.updateCustomer(id, customerRequestDTO);
 
-        URI location = URI.create(String.format("/api/v1/customers/%s", updatedCustomer.id()));
         // Retorna 201 Created com o local do novo recurso no cabeçalho Location
+        URI location = URI.create(String.format("/api/v1/customers/%s", updatedCustomer.id()));
+
 
         return ResponseEntity.status(201).body(updatedCustomer);
 
+
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CustomerResponseDTO>> getAllCustomers() {
+        List<CustomerResponseDTO> getAllCustomers = customerService.getAllCustomers();
+
+        // Retorna 201 Created com o local do novo recurso no cabeçalho Location
+        URI location = URI.create("/api/v1/customers");
+
+        return ResponseEntity.status(201).body(getAllCustomers);
 
     }
 }

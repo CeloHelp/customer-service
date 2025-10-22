@@ -20,9 +20,7 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
 
     Optional<Customer> findByid(UUID id);
 
-
-
-
-
     Optional<Customer> findById(SingularAttribute<AbstractPersistable, Serializable> id);
+
+
 }

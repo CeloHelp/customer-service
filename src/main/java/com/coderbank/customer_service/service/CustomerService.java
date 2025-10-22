@@ -8,19 +8,13 @@ import com.coderbank.customer_service.factory.CustomerFactory;
 import com.coderbank.customer_service.mapper.CustomerMapper;
 import com.coderbank.customer_service.model.Customer;
 import com.coderbank.customer_service.repository.CustomerRepository;
-import jakarta.persistence.metamodel.SingularAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.AbstractPersistable;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Level;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 public class CustomerService {
@@ -68,6 +62,13 @@ public class CustomerService {
 
 
 
+    }
+
+    public List<CustomerResponseDTO> getAllCustomers(){
+        // Lógica para buscar todos os clientes
+
+        List<Customer> customers = customerRepository.findAll();
+        return CustomerMapper.toResponseList(customers);
 
 
     }
