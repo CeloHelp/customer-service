@@ -61,7 +61,17 @@ public class CustomerControllerV1 {
         // Retorna 201 Created com o local do novo recurso no cabeçalho Location
         URI location = URI.create("/api/v1/customers");
 
-        return ResponseEntity.status(201).body(getAllCustomers);
+        return ResponseEntity.status(200).body(getAllCustomers);
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerResponseDTO> getCustomerById(@PathVariable UUID id) {
+        CustomerResponseDTO customerResponseDTO = customerService.getCustomerById(id);
+
+        URI location = URI.create(String.format("/api/v1/customers/%s", customerResponseDTO.id()));
+
+        return ResponseEntity.status(200).body(customerResponseDTO);
 
     }
 }

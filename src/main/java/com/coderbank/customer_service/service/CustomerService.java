@@ -71,6 +71,16 @@ public class CustomerService {
         return CustomerMapper.toResponseList(customers);
 
 
+
+    }
+
+    public CustomerResponseDTO getCustomerById(UUID id) {
+        // Lógica para buscar um cliente pelo ID
+
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Cliente não encontrado com o ID: " + id));
+
+        return CustomerMapper.toResponse(customer);
     }
 
 
