@@ -1,16 +1,14 @@
 package com.coderbank.customer_service.model;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "customers")
 public class Customer {
-    @jakarta.persistence.Id
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(nullable = false)
