@@ -47,6 +47,8 @@ public class CustomerService {
 
 
     }
+
+
     @Transactional  // Anotação para gerenciar transações. Caso algo dê errado a transação será revertida automáticamente. //
     public CustomerResponseDTO updateCustomer(UUID id, CustomerRequestDTO customerRequestDTO) {
         // Lógica para atualizar um cliente
@@ -64,6 +66,7 @@ public class CustomerService {
 
     }
 
+
     public List<CustomerResponseDTO> getAllCustomers(){
         // Lógica para buscar todos os clientes
 
@@ -74,6 +77,7 @@ public class CustomerService {
 
     }
 
+
     public CustomerResponseDTO getCustomerById(UUID id) {
         // Lógica para buscar um cliente pelo ID
 
@@ -81,6 +85,16 @@ public class CustomerService {
                 .orElseThrow(() -> new CustomerNotFoundException("Cliente não encontrado com o ID: " + id));
 
         return CustomerMapper.toResponse(customer);
+    }
+
+    @Transactional
+    public void deleteCustomer(UUID id) {
+        // Lógica para deletar um cliente pelo ID
+
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Cliente não encontrado com o ID: " + id));
+
+        customerRepository.delete(customer);
     }
 
 
