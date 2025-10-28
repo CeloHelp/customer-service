@@ -3,7 +3,6 @@ package com.coderbank.customer_service.controller;
 
 import com.coderbank.customer_service.dto.request.CustomerRequestDTO;
 import com.coderbank.customer_service.dto.response.CustomerResponseDTO;
-import com.coderbank.customer_service.mapper.CustomerMapper;
 import com.coderbank.customer_service.service.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +44,7 @@ public class CustomerControllerV1 {
 
         CustomerResponseDTO updatedCustomer = customerService.updateCustomer(id, customerRequestDTO);
 
-        // Retorna 201 Created com o local do novo recurso no cabeçalho Location
+
         URI location = URI.create(String.format("/api/v1/customers/%s", updatedCustomer.id()));
 
 
@@ -58,8 +57,14 @@ public class CustomerControllerV1 {
     public ResponseEntity<List<CustomerResponseDTO>> getAllCustomers() {
         List<CustomerResponseDTO> getAllCustomers = customerService.getAllCustomers();
 
-        // Retorna 201 Created com o local do novo recurso no cabeçalho Location
-        URI location = URI.create("/api/v1/customers");
+        if(getAllCustomers.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+
+
+
+
+        URI location = URI.create(String.format("/api/v1/customers/"));
 
         return ResponseEntity.status(200).body(getAllCustomers);
 
@@ -69,20 +74,20 @@ public class CustomerControllerV1 {
     public ResponseEntity<CustomerResponseDTO> getCustomerById(@PathVariable UUID id) {
         CustomerResponseDTO customerResponseDTO = customerService.getCustomerById(id);
 
-        // Retorna 201 Created com o local do novo recurso no cabeçalho Location
+
         URI location = URI.create(String.format("/api/v1/customers/%s", customerResponseDTO.id()));
 
         return ResponseEntity.status(200).body(customerResponseDTO);
 
     }
 
-    @GetMapping("delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<CustomerResponseDTO> deleteCustomer(@PathVariable UUID id) {
         CustomerResponseDTO customerResponseDTO = customerService.getCustomerById(id);
 
         customerService.deleteCustomer(id);
 
-        // Retorna 201 Created com o local do novo recurso no cabeçalho Location
+
         URI location = URI.create(String.format("/api/v1/customers/%s", customerResponseDTO.id()));
 
         return ResponseEntity.status(200).body(customerResponseDTO);

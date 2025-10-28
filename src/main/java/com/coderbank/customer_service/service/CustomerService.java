@@ -36,9 +36,9 @@ public class CustomerService {
         Customer customer = CustomerFactory.createFromRequest(customerRequestDTO);
 
         Optional <Customer> existingCustomer = customerRepository.findByCpf(customer.getCpf());
-        if (existingCustomer.isPresent()) {
+        existingCustomer.ifPresent(c -> {
             throw new DuplicateCpfException("CPF duplicado: " + customer.getCpf());
-        }
+        });
 
         customerRepository.save(customer);
 
@@ -72,6 +72,8 @@ public class CustomerService {
 
         List<Customer> customers = customerRepository.findAll();
         return CustomerMapper.toResponseList(customers);
+
+
 
 
 
