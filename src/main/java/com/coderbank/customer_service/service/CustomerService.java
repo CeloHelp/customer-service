@@ -57,6 +57,10 @@ public class CustomerService {
                -> new CustomerNotFoundException("Cliente não encontrado com o ID: " + id)));
 
 
+       if(customerRepository.existsById(id)){
+           customerRepository.save(CustomerFactory.createFromRequest(customerRequestDTO));
+       }
+
         Customer customerToUpdate = existingCustomer.get();
         CustomerMapper.updateEntity(customerToUpdate, customerRequestDTO);
         customerRepository.save(customerToUpdate);
