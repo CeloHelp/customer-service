@@ -34,9 +34,9 @@ public class CustomerMapper {
 
     // Atualiza os campos de um Customer com os dados de um CustomerRequestDTO
     public static void updateEntity(Customer entity, CustomerRequestDTO customerRequestDTO){
-        entity.setName(customerRequestDTO.getName());
-        entity.setEmail(customerRequestDTO.getEmail());
-        entity.setAddress(customerRequestDTO.getAddress());
+        entity.setName(customerRequestDTO.name());
+        entity.setEmail(customerRequestDTO.email());
+        entity.setAddress(customerRequestDTO.address());
 
 
 
