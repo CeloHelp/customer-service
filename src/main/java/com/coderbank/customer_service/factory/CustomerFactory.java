@@ -8,10 +8,10 @@ public class CustomerFactory {
     // Cria um novo Customer com base nos dados fornecidos em CustomerRequestDTO
     public static Customer createFromRequest(CustomerRequestDTO customerRequest){
         Customer customer = new Customer();
-        customer.setName(customerRequest.getName());
-        customer.setCpf(customerRequest.getCpf());
-        customer.setEmail(customerRequest.getEmail());
-        customer.setAddress(customerRequest.getAddress());
+        customer.setName(customerRequest.name());
+        customer.setCpf(customerRequest.cpf());
+        customer.setEmail(customerRequest.email());
+        customer.setAddress(customerRequest.address());
         return customer;
     }
 }
