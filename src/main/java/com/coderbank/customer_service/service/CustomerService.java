@@ -51,23 +51,13 @@ public class CustomerService {
 
     @Transactional  // Anotação para gerenciar transações. Caso algo dê errado a transação será revertida automáticamente. //
     public CustomerResponseDTO updateCustomer(UUID id, CustomerRequestDTO customerRequestDTO) {
-        // Lógica para atualizar um cliente
+        Customer existingCustomer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Cliente não encontrado com o ID: " + id));
 
-       Optional<Customer> existingCustomer = Optional.ofNullable(customerRepository.findById(id).orElseThrow(()
-               -> new CustomerNotFoundException("Cliente não encontrado com o ID: " + id)));
+        CustomerMapper.updateEntity(existingCustomer, customerRequestDTO);
 
-
-       if(customerRepository.existsById(id)){
-           customerRepository.save(CustomerFactory.createFromRequest(customerRequestDTO));
-       }
-
-        Customer customerToUpdate = existingCustomer.get();
-        CustomerMapper.updateEntity(customerToUpdate, customerRequestDTO);
-        customerRepository.save(customerToUpdate);
-        return CustomerMapper.toResponse(customerToUpdate);
-
-
-
+        Customer saved = customerRepository.save(existingCustomer);
+        return CustomerMapper.toResponse(saved);
     }
 
 
