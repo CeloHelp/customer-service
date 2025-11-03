@@ -8,19 +8,13 @@ import com.coderbank.customer_service.factory.CustomerFactory;
 import com.coderbank.customer_service.mapper.CustomerMapper;
 import com.coderbank.customer_service.model.Customer;
 import com.coderbank.customer_service.repository.CustomerRepository;
-import jakarta.persistence.metamodel.SingularAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.AbstractPersistable;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Level;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 public class CustomerService {
@@ -42,9 +36,9 @@ public class CustomerService {
         Customer customer = CustomerFactory.createFromRequest(customerRequestDTO);
 
         Optional <Customer> existingCustomer = customerRepository.findByCpf(customer.getCpf());
-        if (existingCustomer.isPresent()) {
+        existingCustomer.ifPresent(c -> {
             throw new DuplicateCpfException("CPF duplicado: " + customer.getCpf());
-        }
+        });
 
         customerRepository.save(customer);
 
@@ -53,23 +47,50 @@ public class CustomerService {
 
 
     }
+
+
     @Transactional  // Anotação para gerenciar transações. Caso algo dê errado a transação será revertida automáticamente. //
     public CustomerResponseDTO updateCustomer(UUID id, CustomerRequestDTO customerRequestDTO) {
-        // Lógica para atualizar um cliente
+        Customer existingCustomer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Cliente não encontrado com o ID: " + id));
 
-       Optional<Customer> existingCustomer = Optional.ofNullable(customerRepository.findById(id).orElseThrow(()
-               -> new CustomerNotFoundException("Cliente não encontrado com o ID: " + id)));
+        CustomerMapper.updateEntity(existingCustomer, customerRequestDTO);
 
-
-        Customer customerToUpdate = existingCustomer.get();
-        CustomerMapper.updateEntity(customerToUpdate, customerRequestDTO);
-        customerRepository.save(customerToUpdate);
-        return CustomerMapper.toResponse(customerToUpdate);
+        Customer saved = customerRepository.save(existingCustomer);
+        return CustomerMapper.toResponse(saved);
+    }
 
 
+    public List<CustomerResponseDTO> getAllCustomers(){
+        // Lógica para buscar todos os clientes
+
+        List<Customer> customers = customerRepository.findAll();
+        return CustomerMapper.toResponseList(customers);
 
 
 
+
+
+    }
+
+
+    public CustomerResponseDTO getCustomerById(UUID id) {
+        // Lógica para buscar um cliente pelo ID
+
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Cliente não encontrado com o ID: " + id));
+
+        return CustomerMapper.toResponse(customer);
+    }
+
+    @Transactional
+    public void deleteCustomer(UUID id) {
+        // Lógica para deletar um cliente pelo ID
+
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Cliente não encontrado com o ID: " + id));
+
+        customerRepository.delete(customer);
     }
 
 

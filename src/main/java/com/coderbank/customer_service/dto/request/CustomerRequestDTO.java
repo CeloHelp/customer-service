@@ -16,18 +16,4 @@ public record CustomerRequestDTO(
 
         String address
 ) {
-        public String getName() {
-                return name;
-        }
-        public String getCpf() {
-                return cpf;
-        }
-        public String getEmail() {
-                return email;
-
-        }
-        public String getAddress() {
-                return address;
-        }
-
 }
