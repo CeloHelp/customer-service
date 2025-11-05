@@ -7,6 +7,7 @@ import com.coderbank.customer_service.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/customers")
 @Tag(name = "Customers", description = "Operações de clientes (CRUD)")
@@ -32,7 +34,11 @@ public class CustomerControllerV1 {
     @Operation(summary = "Criar cliente", description = "Cria um novo cliente e retorna seus dados")
     public ResponseEntity<CustomerResponseDTO> createCustomer(@Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
 
+        log.info("Recebendo requisição para criar cliente com CPF: {}", customerRequestDTO.cpf());
+
         CustomerResponseDTO createdCustomer = customerService.createCustomer(customerRequestDTO);
+
+        log.info("Cliente criado com sucesso: {}", createdCustomer);
 
         // Retorna 201 Created com o local do novo recurso no cabeçalho Location
         URI location = URI.create(String.format("/api/v1/customers/%s", createdCustomer.id()));
