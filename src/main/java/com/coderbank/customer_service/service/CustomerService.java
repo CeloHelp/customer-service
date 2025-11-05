@@ -8,6 +8,7 @@ import com.coderbank.customer_service.factory.CustomerFactory;
 import com.coderbank.customer_service.mapper.CustomerMapper;
 import com.coderbank.customer_service.model.Customer;
 import com.coderbank.customer_service.repository.CustomerRepository;
+import com.coderbank.customer_service.utils.LogSanitizer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,16 +35,18 @@ public class CustomerService {
     @Transactional
     public CustomerResponseDTO createCustomer(final CustomerRequestDTO customerRequestDTO) {
 
-        String maskedCpf = customerRequestDTO.cpf().substring(0, 3) + "*****" + customerRequestDTO.cpf().substring(8);
+        String safeCpf = LogSanitizer.maskCpf(customerRequestDTO.cpf());
+        String safeEmail = LogSanitizer.maskEmail(customerRequestDTO.email());
+
        // Lógica para criar um novo cliente
-        log.debug("Iniciando o Processo de Criação de Cliente com CPF: {}", maskedCpf);
+        log.info("Iniciando o Processo de Criação de Cliente com CPF: {} e Email: {}", safeCpf, safeEmail);
 
         Customer customer = CustomerFactory.createFromRequest(customerRequestDTO);
 
         Optional <Customer> existingCustomer = customerRepository.findByCpf(customerRequestDTO.cpf());
         existingCustomer.ifPresent(c -> {
             log.warn("Tentativa de criação de cliente com CPF duplicado: {}", customer.getId());
-            throw new DuplicateCpfException("CPF duplicado: " + customer.getId());
+            throw new DuplicateCpfException("CPF duplicado: " + safeCpf);
         });
 
         customerRepository.save(customer);

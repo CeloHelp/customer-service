@@ -4,6 +4,7 @@ package com.coderbank.customer_service.controller;
 import com.coderbank.customer_service.dto.request.CustomerRequestDTO;
 import com.coderbank.customer_service.dto.response.CustomerResponseDTO;
 import com.coderbank.customer_service.service.CustomerService;
+import com.coderbank.customer_service.utils.LogSanitizer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,6 +25,7 @@ public class CustomerControllerV1 {
     private final CustomerService customerService;
 
 
+
     public CustomerControllerV1(CustomerService customerService) {
         this.customerService = customerService;
 
@@ -33,12 +35,14 @@ public class CustomerControllerV1 {
     @PostMapping
     @Operation(summary = "Criar cliente", description = "Cria um novo cliente e retorna seus dados")
     public ResponseEntity<CustomerResponseDTO> createCustomer(@Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
+        String safeCpf = LogSanitizer.maskCpf(customerRequestDTO.cpf());
+        String safeEmail = LogSanitizer.maskEmail(customerRequestDTO.email());
 
-        log.info("Recebendo requisição para criar cliente com CPF: {}", customerRequestDTO.cpf());
+        log.info("Recebendo requisição para criar cliente com CPF: {} e Email:{}", safeCpf, safeEmail);
 
         CustomerResponseDTO createdCustomer = customerService.createCustomer(customerRequestDTO);
 
-        log.info("Cliente criado com sucesso: {}", createdCustomer);
+        log.info("Cliente criado com sucesso: {}", createdCustomer.id());
 
         // Retorna 201 Created com o local do novo recurso no cabeçalho Location
         URI location = URI.create(String.format("/api/v1/customers/%s", createdCustomer.id()));
