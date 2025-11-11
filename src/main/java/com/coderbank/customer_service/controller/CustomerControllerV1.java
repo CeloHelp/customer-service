@@ -3,6 +3,7 @@ package com.coderbank.customer_service.controller;
 
 import com.coderbank.customer_service.dto.request.CustomerRequestDTO;
 import com.coderbank.customer_service.dto.response.CustomerResponseDTO;
+import com.coderbank.customer_service.mapper.CustomerMapper;
 import com.coderbank.customer_service.service.CustomerService;
 import com.coderbank.customer_service.utils.LogSanitizer;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +24,6 @@ import java.util.UUID;
 public class CustomerControllerV1 {
 
     private final CustomerService customerService;
-
 
 
     public CustomerControllerV1(CustomerService customerService) {
@@ -48,7 +48,7 @@ public class CustomerControllerV1 {
         URI location = URI.create(String.format("/api/v1/customers/%s", createdCustomer.id()));
 
 
-        return ResponseEntity.status(201).body(createdCustomer);
+        return ResponseEntity.created(location).body(CustomerMapper.toResponse(createdCustomer));
 
 
     }
@@ -62,8 +62,6 @@ public class CustomerControllerV1 {
         log.info("Recebendo requisição para atualizar cliente com ID: {} , CPF: {} e Email: {}", id, safeCpf, safeEmail);
         CustomerResponseDTO updatedCustomer = customerService.updateCustomer(id, customerRequestDTO);
 
-
-        URI location = URI.create(String.format("/api/v1/customers/%s", updatedCustomer.id()));
 
         log.info("Cliente atualizado com sucesso(HTTP 200): {}", updatedCustomer.id());
         return ResponseEntity.status(201).body(updatedCustomer);
@@ -87,10 +85,6 @@ public class CustomerControllerV1 {
         }
 
 
-
-
-        URI location = URI.create(String.format("/api/v1/customers/"));
-
         log.info("Clientes listado com sucesso (HTTP 200): {}", getAllCustomers.toString());
 
         return ResponseEntity.status(200).body(getAllCustomers);
@@ -104,8 +98,6 @@ public class CustomerControllerV1 {
         log.info("Recebendo requisição para buscar cliente com ID: {}", id);
         CustomerResponseDTO customerResponseDTO = customerService.getCustomerById(id);
 
-
-        URI location = URI.create(String.format("/api/v1/customers/%s", customerResponseDTO.id()));
 
         log.info("Cliente encontrado com sucesso (HTTP 200): {}", customerResponseDTO.id());
         return ResponseEntity.status(200).body(customerResponseDTO);
@@ -121,8 +113,6 @@ public class CustomerControllerV1 {
 
         customerService.deleteCustomer(id);
 
-
-        URI location = URI.create(String.format("/api/v1/customers/%s", customerResponseDTO.id()));
 
         log.info("Cliente excluído com sucesso (HTTP 200): {}", customerResponseDTO.id());
         return ResponseEntity.status(200).body(customerResponseDTO);

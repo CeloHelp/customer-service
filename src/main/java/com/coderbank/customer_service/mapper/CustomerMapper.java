@@ -3,9 +3,6 @@ package com.coderbank.customer_service.mapper;
 import com.coderbank.customer_service.dto.request.CustomerRequestDTO;
 import com.coderbank.customer_service.dto.response.CustomerResponseDTO;
 import com.coderbank.customer_service.model.Customer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class CustomerMapper {
     // Converte Customer para CustomerResponseDTO
-    public static CustomerResponseDTO toResponse(Customer customer ){
+    public static CustomerResponseDTO toResponse(CustomerResponseDTO customer ){
         // Mapeia os campos do Customer para o CustomerResponseDTO
 
         return new CustomerResponseDTO(
