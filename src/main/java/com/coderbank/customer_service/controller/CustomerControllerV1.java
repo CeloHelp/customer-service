@@ -48,7 +48,7 @@ public class CustomerControllerV1 {
         URI location = URI.create(String.format("/api/v1/customers/%s", createdCustomer.id()));
 
 
-        return ResponseEntity.created(location).body(CustomerMapper.toResponse(createdCustomer));
+        return ResponseEntity.created(location).body(createdCustomer);
 
 
     }
@@ -80,12 +80,12 @@ public class CustomerControllerV1 {
 
 
         if(getAllCustomers.isEmpty()){
-            log.debug("Nenhum cliente encontrado na base de dados");
+            log.info("Clientes listados (HTTP 204): Nenhum cliente encontrado.");
             return ResponseEntity.status(204).build();
         }
 
 
-        log.info("Clientes listado com sucesso (HTTP 200): {}", getAllCustomers.toString());
+        log.info("Clientes listado com sucesso (HTTP 200): {} itens", getAllCustomers.size());
 
         return ResponseEntity.status(200).body(getAllCustomers);
 

@@ -1,0 +1,24 @@
+<!-- src/main/resources/logback-spring.xml -->
+<configuration scan="true">
+
+    <!-- Lê propriedades do Spring para usar no JSON -->
+    <springProperty name="APP_NAME" source="spring.application.name" defaultValue="customer-service"/>
+    <springProperty name="ENV"      source="spring.profiles.active"   defaultValue="dev"/>
+
+    <!-- Console em JSON (Logstash Encoder) -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <!-- Campos fixos adicionados em TODO log -->
+            <customFields>{"service":"${APP_NAME}","environment":"${ENV}"}</customFields>
+        </encoder>
+    </appender>
+
+    <!-- Nível global de logs -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- Seu pacote com DEBUG em dev (detalhe sem poluir libs de terceiros) -->
+    <logger name="com.coderbank.customer_service" level="DEBUG"/>
+
+</configuration>

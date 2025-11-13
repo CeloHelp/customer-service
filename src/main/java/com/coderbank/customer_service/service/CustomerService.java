@@ -77,6 +77,7 @@ public class CustomerService {
 
         log.info("Cliente atualizado e salvo no banco de dados: {}", saved.getId());
         return CustomerMapper.toResponse(saved);
+
     }
 
 

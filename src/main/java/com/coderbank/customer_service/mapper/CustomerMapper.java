@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class CustomerMapper {
     // Converte Customer para CustomerResponseDTO
-    public static CustomerResponseDTO toResponse(CustomerResponseDTO customer ){
+    public static CustomerResponseDTO toResponse(Customer customer ){
         // Mapeia os campos do Customer para o CustomerResponseDTO
 
         return new CustomerResponseDTO(
