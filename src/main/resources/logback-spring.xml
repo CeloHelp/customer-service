@@ -11,6 +11,12 @@
             <!-- Campos fixos adicionados em TODO log -->
             <customFields>{"service":"${APP_NAME}","environment":"${ENV}"}</customFields>
         </encoder>
+
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"service":"${APP_NAME}","environment":"${ENV}"}</customFields>
+            <includeMdc>true</includeMdc>
+        </encoder>
+
     </appender>
 
     <!-- Nível global de logs -->
