@@ -16,4 +16,5 @@ public record CustomerRequestDTO(
 
         String address
 ) {
+
 }
